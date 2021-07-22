@@ -3,7 +3,9 @@ package com.leijendary.spring.authenticationtemplate.generator;
 import com.leijendary.spring.authenticationtemplate.config.properties.AuthProperties;
 import com.leijendary.spring.authenticationtemplate.data.Jwt;
 import com.leijendary.spring.authenticationtemplate.data.JwtParameters;
-import com.nimbusds.jose.*;
+import com.nimbusds.jose.JOSEObjectType;
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
@@ -19,13 +21,14 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.time.Instant;
-import java.util.Base64;
 import java.util.Date;
-import java.util.UUID;
 
 import static com.leijendary.spring.authenticationtemplate.generator.JwtGenerator.TokenType.ACCESS_TOKEN;
 import static com.leijendary.spring.authenticationtemplate.generator.JwtGenerator.TokenType.REFRESH_TOKEN;
+import static java.lang.String.join;
 import static java.time.temporal.ChronoUnit.MINUTES;
+import static java.util.Base64.getDecoder;
+import static java.util.UUID.randomUUID;
 
 @Component
 @RequiredArgsConstructor
@@ -71,13 +74,13 @@ public class JwtGenerator {
                     .subject(parameters.getSubject())
                     .claim(CLAIM_ISSUE_TIME, new Date().getTime())
                     .claim(CLAIM_EXPIRY, expiration.getTime())
-                    .claim(CLAIM_SCOPE, parameters.getScopes());
+                    .claim(CLAIM_SCOPE, join(" ", parameters.getScopes()));
 
             if (tokenType == ACCESS_TOKEN) {
                 claims = claims.jwtID(parameters.getTokenId());
             } else if (tokenType == REFRESH_TOKEN) {
                 claims = claims
-                        .jwtID(UUID.randomUUID().toString())
+                        .jwtID(randomUUID().toString())
                         .claim(CLAIM_ATI, parameters.getTokenId());
             }
 
@@ -111,7 +114,7 @@ public class JwtGenerator {
 
     private RSAPrivateKey getPrivateKey() throws NoSuchAlgorithmException, InvalidKeySpecException {
         final var privateKey = authProperties.getPrivateKey().replaceAll("\\n", "");
-        final var keySpec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(privateKey));
+        final var keySpec = new PKCS8EncodedKeySpec(getDecoder().decode(privateKey));
         final var keyFactory = getKeyFactory();
 
         return (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
@@ -119,7 +122,7 @@ public class JwtGenerator {
 
     public RSAPublicKey getPublicKey() throws NoSuchAlgorithmException, InvalidKeySpecException {
         final var publicKey = authProperties.getPublicKey().replaceAll("\\n", "");
-        final var keySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(publicKey));
+        final var keySpec = new X509EncodedKeySpec(getDecoder().decode(publicKey));
         final var keyFactory = getKeyFactory();
 
         return (RSAPublicKey) keyFactory.generatePublic(keySpec);
