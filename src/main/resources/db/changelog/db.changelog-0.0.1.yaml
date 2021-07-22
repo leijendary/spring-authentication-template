@@ -1,0 +1,156 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1626889383073-1
+      author: Leijendary (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_auth_access
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: auth_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: token
+                  type: TEXT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: expiry_date
+                  type: TIMESTAMP WITH TIME ZONE
+            tableName: auth_access
+  - changeSet:
+      id: 1626889383073-2
+      author: Leijendary (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_auth_refresh
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: auth_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: token
+                  type: TEXT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: expiry_date
+                  type: TIMESTAMP WITH TIME ZONE
+            tableName: auth_refresh
+  - changeSet:
+      id: 1626889383073-3
+      author: Leijendary (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_auth
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: user_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: username
+                  type: TEXT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: audience
+                  type: TEXT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: type
+                  type: VARCHAR(6)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: device_id
+                  type: TEXT
+              - column:
+                  constraints:
+                    nullable: false
+                  defaultValueComputed: now()
+                  name: created_date
+                  type: TIMESTAMP WITH TIME ZONE
+            tableName: auth
+  - changeSet:
+      id: 1626889383073-4
+      author: Leijendary (generated)
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: token
+            indexName: idx_auth_access_token
+            tableName: auth_access
+  - changeSet:
+      id: 1626889383073-5
+      author: Leijendary (generated)
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: token
+            indexName: idx_auth_refresh_token
+            tableName: auth_refresh
+  - changeSet:
+      id: 1626889383073-6
+      author: Leijendary (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: auth_id
+            baseTableName: auth_access
+            constraintName: fk_auth_access_auth_id
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: auth
+            validate: true
+  - changeSet:
+      id: 1626889383073-7
+      author: Leijendary (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: auth_id
+            baseTableName: auth_refresh
+            constraintName: fk_auth_refresh_auth_id
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: auth
+            validate: true

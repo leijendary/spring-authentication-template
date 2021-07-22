@@ -1,0 +1,207 @@
+info:
+  app:
+    organization: leijendary
+    artifactId: "@[project.artifactId]"
+    name: "@[project.name]"
+    description: "@[project.description]"
+    version: "@[project.version]"
+  api:
+    termsOfServiceUrl:
+    contact:
+      name: Jonathan Leijendekker
+      url: https://leijendary.com
+      email:
+    license:
+    licenseUrl:
+    vendorExtensions:
+
+auth:
+  issuer: http://localhost:8000
+  keyId: authorization-template-key-id
+  accessToken:
+    expiry: 5 # 5 minutes
+  refreshToken:
+    expiry: 288000 # 200 days
+  privateKey: |
+    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
+    chKwCVPWcJZNWLx0CoOA854fWnfQKI4O
+  publicKey: |
+    MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA4X7hcUhlZPblwNwFBtN/
+    oATaahyiWB+rXaNR2BW/07LWPm43HQYse4FEV9vPI2s5mtECcDzq5rkr5wbp8kAY
+    g4fp6wN2HBTPE9sXzF1sEJvumAivuEcyEtuSIxVPsSs+jwRPB8fIaTknMzFScRw7
+    4+NMVu9Oex6UzChOoEkHp6OJUuyFwBpAgMsV73/u50IIZZFpO9u3olJr6GoMPccn
+    OuzvBohx4CLO249+Cp5nj8S754/3yagc0DVuMar/vFij4l3kd6wfRLrl6ZgJA1aT
+    D90yJh3lgg3QHZk/1jrCulDW3vWM4sOj4u+kgUJz7RhXw0lDityZz+J2ZUcUt6wk
+    8biQov0uZQ/9Iigxo8jSoDi9yyBS5OjVT3SlPrS7g1O+PRdM3QqZ0LSQj939rVDv
+    Qs6te7Z/MtHmEa+wd9y51Bq26bwfsBxJHkbC6n1WTuavnowCxjgPSXcfncjbNLDe
+    myMTBxr5D8LsCpX9e7J2s2+eYCwJbDlWrbVIYdzNteQ4J7yGomI2lG+Bek4PWqn/
+    ArKlLB/XqdMbs00NFKCOzN0t++qYvbHgFn0OzT46D2hDiDwD9e/PaURM8MJJsVE7
+    HYnZ3caqim8JJpxRuKD9Erw76y1NJgARF4x7UaSTuEWqRByA4/XhtHtVZQX6dPPK
+    EJ/KymxCFbGl1vsOFeBKZXsCAwEAAQ==
+
+cors:
+  allowCredentials: true
+  allowedOrigins:
+  allowedOriginPatterns: '*'
+  allowedHeaders: '*'
+  allowedMethods:
+    - get
+    - post
+    - put
+    - patch
+    - delete
+    - options
+    - head
+    - trace
+  exposedHeaders: '*'
+
+spring:
+  application:
+    name: ${info.app.name}
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration
+  datasource:
+    url:
+    username:
+    password:
+    hikari:
+      dataSourceProperties:
+        cachePrepStmts: true
+        rewriteBatchedStatements: true
+        useServerPrepStmts: true
+      maximumPoolSize: 50
+  data:
+    web:
+      pageable:
+        maxPageSize: 100
+        oneIndexedParameters: true
+  jpa:
+    openInView: false
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 1000
+  messages:
+    basename: messages.access, messages.error, messages.validation
+  cloud:
+    stream:
+      bindings:
+        tokenCreated-out-0:
+          destination: ${info.app.artifactId}.token.created
+          producer:
+            useNativeEncoding: true
+        tokenRefreshed-out-0:
+          destination: ${info.app.artifactId}.token.refreshed
+          producer:
+            useNativeEncoding: true
+        tokenRevoked-out-0:
+          destination: ${info.app.artifactId}.token.revoked
+          producer:
+            useNativeEncoding: true
+        userCreated-in-0:
+          destination: account-microservice.user.created
+        userUpdated-in-0:
+          destination: account-microservice.user.updated
+      function:
+        definition: >-
+          userCreated;
+          userUpdated
+      kafka:
+        binder:
+          autoAddPartitions: true
+        streams:
+          binder:
+            configuration:
+              default:
+                key:
+                  serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                value:
+                  serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
+            functions:
+              tokenCreated:
+                applicationId: ${info.app.organization}.${info.app.artifactId}.token.created
+              tokenRefreshed:
+                applicationId: ${info.app.organization}.${info.app.artifactId}.token.refreshed
+              tokenRevoked:
+                applicationId: ${info.app.organization}.${info.app.artifactId}.token.revoked
+              userCreated:
+                applicationId: ${info.app.organization}.account-microservice.user.created
+              userUpdated:
+                applicationId: ${info.app.organization}.account-microservice.user.updated
+  kafka:
+    bootstrapServers:
+    consumer:
+      keyDeserializer: org.apache.kafka.common.serialization.StringDeserializer
+      valueDeserializer: io.confluent.kafka.streams.serdes.avro.SpecificAvroDeserializer
+    producer:
+      keySerializer: org.apache.kafka.common.serialization.StringSerializer
+      valueSerializer: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerializer
+    properties:
+      schema:
+        registry:
+          url:
+
+server:
+  compression:
+    enabled: true
+    mimeTypes: application/json
+  error:
+    whitelabel:
+      enabled: false
+  http2:
+    enabled: true
+  servlet:
+    contextPath: /authentication
+  tomcat:
+    relaxedQueryChars: '[,]'
+    threads:
+      max: 500
