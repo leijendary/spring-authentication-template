@@ -1,7 +1,7 @@
 package com.leijendary.spring.authenticationtemplate.config;
 
 import com.leijendary.spring.authenticationtemplate.config.properties.AuthProperties;
-import com.leijendary.spring.authenticationtemplate.generator.JwtGenerator;
+import com.leijendary.spring.authenticationtemplate.security.JwtTools;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.KeyUse;
@@ -18,11 +18,11 @@ import java.security.spec.InvalidKeySpecException;
 public class JwksConfiguration {
 
     private final AuthProperties authProperties;
-    private final JwtGenerator jwtGenerator;
+    private final JwtTools jwtTools;
 
     @Bean
     public JWKSet jwkSet() throws NoSuchAlgorithmException, InvalidKeySpecException {
-        final var key = new RSAKey.Builder(jwtGenerator.getPublicKey())
+        final var key = new RSAKey.Builder(jwtTools.getAccessTokenPublicKey())
                 .keyUse(KeyUse.SIGNATURE)
                 .algorithm(JWSAlgorithm.RS256)
                 .keyID(authProperties.getKeyId())

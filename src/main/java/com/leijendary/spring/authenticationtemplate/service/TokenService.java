@@ -6,23 +6,23 @@ import com.leijendary.spring.authenticationtemplate.data.request.v1.TokenRefresh
 import com.leijendary.spring.authenticationtemplate.data.request.v1.TokenRequestV1;
 import com.leijendary.spring.authenticationtemplate.data.request.v1.TokenRevokeRequestV1;
 import com.leijendary.spring.authenticationtemplate.data.response.v1.TokenResponseV1;
-import com.leijendary.spring.authenticationtemplate.exception.InvalidCredentialException;
-import com.leijendary.spring.authenticationtemplate.exception.NotActiveException;
-import com.leijendary.spring.authenticationtemplate.exception.ResourceNotFoundException;
+import com.leijendary.spring.authenticationtemplate.exception.*;
 import com.leijendary.spring.authenticationtemplate.factory.AuthFactory;
-import com.leijendary.spring.authenticationtemplate.generator.JwtGenerator;
 import com.leijendary.spring.authenticationtemplate.model.*;
 import com.leijendary.spring.authenticationtemplate.repository.*;
-import com.leijendary.spring.authenticationtemplate.validator.v1.TokenRefreshRequestV1Validator;
-import com.leijendary.spring.authenticationtemplate.validator.v1.TokenRequestV1Validator;
+import com.leijendary.spring.authenticationtemplate.security.JwtTools;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static java.util.Optional.ofNullable;
+import static java.util.UUID.fromString;
+import static java.util.UUID.randomUUID;
 
 @Service
 @RequiredArgsConstructor
@@ -33,17 +33,20 @@ public class TokenService extends AbstractService {
     private final AuthRepository authRepository;
     private final IamUserCredentialRepository iamUserCredentialRepository;
     private final IamUserRepository iamUserRepository;
-    private final JwtGenerator jwtGenerator;
-    private final TokenRefreshRequestV1Validator tokenRefreshRequestV1Validator;
-    private final TokenRequestV1Validator tokenRequestV1Validator;
+    private final JwtTools jwtTools;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public TokenResponseV1 create(final TokenRequestV1 tokenRequest) {
-        validate(tokenRequestV1Validator, tokenRequest, TokenRequestV1.class);
-
         final var credential = iamUserCredentialRepository
                 .findFirstByUsernameIgnoreCase(tokenRequest.getUsername())
                 .orElseThrow(() -> new InvalidCredentialException(tokenRequest.getUsername(), "username"));
+
+        // Validate password
+        if (!passwordEncoder.matches(tokenRequest.getPassword(), credential.getPassword())) {
+            throw new InvalidCredentialException(tokenRequest.getUsername(), "username");
+        }
+
         final var user = credential.getUser();
         final var account = user.getAccount();
 
@@ -63,7 +66,7 @@ public class TokenService extends AbstractService {
 
         final var scopes = formatScopes(user.getRole().getPermissions());
 
-        generateAndSaveTokens(auth, credential.getUsername(), tokenRequest.getAudience(), scopes);
+        generateAndSetTokens(auth, credential.getUsername(), tokenRequest.getAudience(), scopes);
 
         credential.setLastUsedDate(Instant.now());
 
@@ -74,10 +77,22 @@ public class TokenService extends AbstractService {
 
     @Transactional
     public TokenResponseV1 refresh(final TokenRefreshRequestV1 refreshRequest) {
-        validate(tokenRefreshRequestV1Validator, refreshRequest, TokenRefreshRequestV1.class);
+        final var parsedJwt = jwtTools.parse(refreshRequest.getRefreshToken());
 
-        final var auth = authRepository.findFirstByRefreshToken(refreshRequest.getRefreshToken())
-                .orElseThrow(() -> new ResourceNotFoundException("refreshToken", refreshRequest.getRefreshToken()));
+        if (!parsedJwt.isVerified()) {
+            throw new InvalidTokenSignatureException("refreshToken");
+        }
+
+        final var auth = authRepository.findFirstByRefreshId(fromString(parsedJwt.getId()))
+                .orElseThrow(() -> new InvalidTokenException("refreshToken"));
+        final var isExpired = ofNullable(parsedJwt.getExpirationTime())
+                .map(expirationTime -> expirationTime.isBefore(Instant.now()))
+                .orElse(true);
+
+        if (isExpired) {
+            throw new TokenExpiredException("refreshToken");
+        }
+
         final var user = iamUserRepository.findById(auth.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("user", auth.getUserId()));
         final var account = user.getAccount();
@@ -87,56 +102,55 @@ public class TokenService extends AbstractService {
 
         final var scopes = formatScopes(user.getRole().getPermissions());
 
-        generateAndSaveTokens(auth, auth.getUsername(), auth.getAudience(), scopes);
+        // Delete old tokens
+        authAccessRepository.delete(auth.getAccess());
+        authRefreshRepository.delete(auth.getRefresh());
+
+        generateAndSetTokens(auth, auth.getUsername(), auth.getAudience(), scopes);
 
         return AuthFactory.toTokenResponseV1(auth);
     }
 
     public void revoke(final TokenRevokeRequestV1 revokeRequest) {
+        final var parsedJwt = jwtTools.parse(revokeRequest.getAccessToken());
+
+        if (!parsedJwt.isVerified()) {
+            throw new InvalidTokenSignatureException("accessToken");
+        }
+
         authRepository
-                .findFirstByAccessToken(revokeRequest.getAccessToken())
-                .ifPresent((auth) -> {
-                    authAccessRepository.delete(auth.getAccess());
-                    authRefreshRepository.delete(auth.getRefresh());
-                    authRepository.delete(auth);
-                });
+                .findFirstByAccessId(fromString(parsedJwt.getId()))
+                .ifPresent(authRepository::delete);
     }
 
-    private void generateAndSaveTokens(final Auth auth, final String username, final String audience,
-                                       final Set<String> scopes) {
+    private void generateAndSetTokens(final Auth auth, final String username, final String audience,
+                                      final Set<String> scopes) {
         final var jwtParameters = JwtParameters.builder()
-                .tokenId(String.valueOf(auth.getId()))
+                .accessTokenId(randomUUID())
+                .refreshTokenId(randomUUID())
                 .subject(username)
                 .audience(audience)
                 .scopes(scopes)
                 .build();
-        final var jwt = jwtGenerator.jwt(jwtParameters);
+        final var jwt = jwtTools.create(jwtParameters);
         final var authAccess = AuthAccess.builder()
+                .id(jwt.getAccessTokenId())
                 .auth(auth)
                 .token(jwt.getAccessToken())
                 .expiryDate(jwt.getAccessTokenExpiration().toInstant())
                 .build();
+
+        auth.setAccess(authAccess);
+
         final var authRefresh = AuthRefresh.builder()
+                .id(jwt.getRefreshTokenId())
                 .auth(auth)
+                .accessTokenId(jwt.getAccessTokenId())
                 .token(jwt.getRefreshToken())
                 .expiryDate(jwt.getRefreshTokenExpiration().toInstant())
                 .build();
 
-        Optional.ofNullable(auth.getAccess())
-                .ifPresent((access) -> authAccess.setId(access.getId()));
-
-        auth.setAccess(authAccess);
-
-        authAccessRepository.save(authAccess);
-
-        Optional.ofNullable(auth.getRefresh())
-                .ifPresent((refresh) -> authRefresh.setId(refresh.getId()));
-
         auth.setRefresh(authRefresh);
-
-        authRefreshRepository.save(authRefresh);
-
-        authRepository.save(auth);
     }
 
     private Set<String> formatScopes(final Set<IamPermission> permissions) {

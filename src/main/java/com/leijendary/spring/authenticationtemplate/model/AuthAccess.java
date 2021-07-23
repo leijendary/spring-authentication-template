@@ -1,18 +1,25 @@
 package com.leijendary.spring.authenticationtemplate.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import java.time.Instant;
+import java.util.UUID;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class AuthAccess extends IdentityIdModel {
+public class AuthAccess {
+
+    @Id
+    private UUID id;
 
     @OneToOne
     private Auth auth;

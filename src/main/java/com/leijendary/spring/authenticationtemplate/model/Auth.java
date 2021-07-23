@@ -5,7 +5,10 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.OneToOne;
 import java.time.Instant;
 
 @Data
@@ -27,11 +30,11 @@ public class Auth extends SnowflakeIdModel {
     private Instant createdDate;
 
     @ToString.Exclude
-    @OneToOne(mappedBy = "auth")
+    @OneToOne(mappedBy = "auth", cascade = CascadeType.ALL)
     private AuthAccess access;
 
     @ToString.Exclude
-    @OneToOne(mappedBy = "auth")
+    @OneToOne(mappedBy = "auth", cascade = CascadeType.ALL)
     private AuthRefresh refresh;
 
     public static class Type {

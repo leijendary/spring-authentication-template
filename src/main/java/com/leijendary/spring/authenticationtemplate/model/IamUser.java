@@ -2,6 +2,7 @@ package com.leijendary.spring.authenticationtemplate.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -26,6 +27,7 @@ public class IamUser extends SnowflakeIdModel {
     @JoinColumn(name = "iam_role_id")
     private IamRole role;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "user")
     private Set<IamUserCredential> credentials;
 

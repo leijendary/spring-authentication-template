@@ -2,6 +2,7 @@ package com.leijendary.spring.authenticationtemplate.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -17,6 +18,7 @@ import java.time.Instant;
 @EntityListeners(AuditingEntityListener.class)
 public class IamUserCredential extends IdentityIdModel {
 
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "iam_user_id")
     private IamUser user;

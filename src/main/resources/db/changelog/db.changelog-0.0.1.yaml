@@ -6,13 +6,12 @@ databaseChangeLog:
         - createTable:
             columns:
               - column:
-                  autoIncrement: true
                   constraints:
                     nullable: false
                     primaryKey: true
                     primaryKeyName: pk_auth_access
                   name: id
-                  type: BIGINT
+                  type: UUID
               - column:
                   constraints:
                     nullable: false
@@ -36,18 +35,22 @@ databaseChangeLog:
         - createTable:
             columns:
               - column:
-                  autoIncrement: true
                   constraints:
                     nullable: false
                     primaryKey: true
                     primaryKeyName: pk_auth_refresh
                   name: id
-                  type: BIGINT
+                  type: UUID
               - column:
                   constraints:
                     nullable: false
                   name: auth_id
                   type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: access_token_id
+                  type: UUID
               - column:
                   constraints:
                     nullable: false
@@ -104,26 +107,6 @@ databaseChangeLog:
                   name: created_date
                   type: TIMESTAMP WITH TIME ZONE
             tableName: auth
-  - changeSet:
-      id: 1626889383073-4
-      author: Leijendary (generated)
-      changes:
-        - createIndex:
-            columns:
-              - column:
-                  name: token
-            indexName: idx_auth_access_token
-            tableName: auth_access
-  - changeSet:
-      id: 1626889383073-5
-      author: Leijendary (generated)
-      changes:
-        - createIndex:
-            columns:
-              - column:
-                  name: token
-            indexName: idx_auth_refresh_token
-            tableName: auth_refresh
   - changeSet:
       id: 1626889383073-6
       author: Leijendary (generated)

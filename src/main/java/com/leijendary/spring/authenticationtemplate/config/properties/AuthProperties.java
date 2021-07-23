@@ -11,18 +11,20 @@ public class AuthProperties {
     private String keyId;
     private AccessToken accessToken;
     private RefreshToken refreshToken;
-    private String privateKey;
-    private String publicKey;
 
     @Data
     public static class AccessToken {
 
         private int expiry;
+        private String privateKey;
+        private String publicKey;
     }
 
     @Data
     public static class RefreshToken {
 
         private int expiry;
+        private String privateKey;
+        private String publicKey;
     }
 }

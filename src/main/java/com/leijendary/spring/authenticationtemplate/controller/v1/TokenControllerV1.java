@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.concurrent.CompletableFuture;
 
 import static com.leijendary.spring.authenticationtemplate.controller.AbstractController.BASE_API_PATH;
@@ -31,7 +32,7 @@ public class TokenControllerV1 extends AbstractController {
     @ResponseStatus(CREATED)
     @ApiOperation("Creates an access token with refresh token. The tokens will be saved to the database for " +
             "reference until revoked")
-    public CompletableFuture<DataResponse<TokenResponseV1>> create(@RequestBody final TokenRequestV1 request) {
+    public CompletableFuture<DataResponse<TokenResponseV1>> create(@Valid @RequestBody final TokenRequestV1 request) {
         final var tokenResponse = tokenService.create(request);
         final var response = DataResponse.<TokenResponseV1>builder()
                 .data(tokenResponse)
@@ -45,7 +46,8 @@ public class TokenControllerV1 extends AbstractController {
     @PostMapping("refresh")
     @ApiOperation("Refreshes an access token using the refresh token provided. The refresh token must exist and " +
             "the expiration date should be after the current date")
-    public CompletableFuture<DataResponse<TokenResponseV1>> refresh(@RequestBody final TokenRefreshRequestV1 request) {
+    public CompletableFuture<DataResponse<TokenResponseV1>> refresh(
+            @Valid @RequestBody final TokenRefreshRequestV1 request) {
         final var tokenResponse = tokenService.refresh(request);
         final var response = DataResponse.<TokenResponseV1>builder()
                 .data(tokenResponse)
@@ -58,7 +60,7 @@ public class TokenControllerV1 extends AbstractController {
     @DeleteMapping
     @ResponseStatus(NO_CONTENT)
     @ApiOperation("Revokes the access token")
-    public CompletableFuture<Void> revoke(@RequestBody final TokenRevokeRequestV1 request) {
+    public CompletableFuture<Void> revoke(@Valid @RequestBody final TokenRevokeRequestV1 request) {
         tokenService.revoke(request);
 
         return completedFuture(null);

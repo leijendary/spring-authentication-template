@@ -2,6 +2,7 @@ package com.leijendary.spring.authenticationtemplate.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -18,6 +19,7 @@ import java.util.Set;
 @Entity
 public class IamAccount extends SnowflakeIdModel {
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "account")
     private Set<IamUser> users;
 

@@ -1,9 +1,8 @@
 package com.leijendary.spring.authenticationtemplate.error;
 
 import com.leijendary.spring.authenticationtemplate.data.response.ErrorResponse;
-import com.leijendary.spring.authenticationtemplate.exception.InvalidCredentialException;
+import com.leijendary.spring.authenticationtemplate.exception.TokenExpiredException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,27 +10,24 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import static java.util.Locale.getDefault;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @RestControllerAdvice
 @Order(3)
 @RequiredArgsConstructor
-@Slf4j
-public class InvalidCredentialExceptionHandler {
+public class TokenExpiredExceptionHandler {
 
     private final MessageSource messageSource;
 
-    @ExceptionHandler(InvalidCredentialException.class)
-    @ResponseStatus(NOT_FOUND)
-    public ErrorResponse catchInvalidCredential(final InvalidCredentialException exception) {
-        log.error(exception.getMessage(), exception);
-
-        final var code = "validation.credentials.invalid";
+    @ExceptionHandler(TokenExpiredException.class)
+    @ResponseStatus(BAD_REQUEST)
+    public ErrorResponse catchTokenExpired(final TokenExpiredException exception) {
+        final var code = "validation.token.expired";
         final var message = messageSource.getMessage(code, new Object[] { }, getDefault());
 
         return ErrorResponse.builder()
                 .addError(exception.getSource(), code, message)
-                .status(NOT_FOUND)
+                .status(BAD_REQUEST)
                 .build();
     }
 }
