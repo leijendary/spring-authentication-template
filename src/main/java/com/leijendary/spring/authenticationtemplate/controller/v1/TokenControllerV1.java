@@ -37,7 +37,7 @@ public class TokenControllerV1 extends AbstractController {
         final var response = DataResponse.<TokenResponseV1>builder()
                 .data(tokenResponse)
                 .status(CREATED)
-                .object(TokenResponseV1.class.getSimpleName())
+                .object(TokenResponseV1.class)
                 .build();
 
         return completedFuture(response);
@@ -51,7 +51,7 @@ public class TokenControllerV1 extends AbstractController {
         final var tokenResponse = tokenService.refresh(request);
         final var response = DataResponse.<TokenResponseV1>builder()
                 .data(tokenResponse)
-                .object(TokenResponseV1.class.getSimpleName())
+                .object(TokenResponseV1.class)
                 .build();
 
         return completedFuture(response);

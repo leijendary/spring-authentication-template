@@ -64,8 +64,8 @@ public class DataResponse<T> {
             return this;
         }
 
-        public DataResponseBuilder<T> object(final String object) {
-            this.meta.put("object", object);
+        public DataResponseBuilder<T> object(final Class<T> tClass) {
+            this.meta.put("object", tClass.getSimpleName());
 
             return this;
         }
