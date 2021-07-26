@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -64,7 +65,7 @@ public class TokenService extends AbstractService {
 
         authRepository.save(auth);
 
-        final var scopes = formatScopes(user.getRole().getPermissions());
+        final var scopes = getScopes(user);
 
         generateAndSetTokens(auth, credential.getUsername(), tokenRequest.getAudience(), scopes);
 
@@ -100,7 +101,7 @@ public class TokenService extends AbstractService {
         checkUserStatus(user);
         checkAccountStatus(account);
 
-        final var scopes = formatScopes(user.getRole().getPermissions());
+        final var scopes = getScopes(user);
 
         // Delete old tokens
         authAccessRepository.delete(auth.getAccess());
@@ -153,7 +154,15 @@ public class TokenService extends AbstractService {
         auth.setRefresh(authRefresh);
     }
 
-    private Set<String> formatScopes(final Set<IamPermission> permissions) {
+    private Set<String> getScopes(final IamUser user) {
+        final var permissions = ofNullable(user.getRole())
+                .map(IamRole::getPermissions)
+                .orElse(new HashSet<>());
+
+        return formatToScope(permissions);
+    }
+
+    private Set<String> formatToScope(final Set<IamPermission> permissions) {
         return permissions
                 .stream()
                 .map(IamPermission::getPermission)
