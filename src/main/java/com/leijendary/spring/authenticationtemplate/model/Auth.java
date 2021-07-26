@@ -9,7 +9,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.OneToOne;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 @Data
 @Builder
@@ -27,7 +27,7 @@ public class Auth extends SnowflakeIdModel {
     private String deviceId;
 
     @CreatedDate
-    private Instant createdDate;
+    private OffsetDateTime createdDate;
 
     @ToString.Exclude
     @OneToOne(mappedBy = "auth", cascade = CascadeType.ALL)

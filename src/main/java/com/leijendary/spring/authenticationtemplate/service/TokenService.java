@@ -16,11 +16,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.leijendary.spring.authenticationtemplate.util.RequestContextUtil.now;
 import static java.util.Optional.ofNullable;
 import static java.util.UUID.fromString;
 import static java.util.UUID.randomUUID;
@@ -60,7 +60,7 @@ public class TokenService extends AbstractService {
                 .audience(tokenRequest.getAudience())
                 .type(tokenRequest.getType())
                 .deviceId(tokenRequest.getDeviceId())
-                .createdDate(Instant.now())
+                .createdDate(now())
                 .build();
 
         authRepository.save(auth);
@@ -69,7 +69,7 @@ public class TokenService extends AbstractService {
 
         generateAndSetTokens(auth, credential.getUsername(), tokenRequest.getAudience(), scopes);
 
-        credential.setLastUsedDate(Instant.now());
+        credential.setLastUsedDate(now());
 
         iamUserCredentialRepository.save(credential);
 
@@ -87,7 +87,7 @@ public class TokenService extends AbstractService {
         final var auth = authRepository.findFirstByRefreshId(fromString(parsedJwt.getId()))
                 .orElseThrow(() -> new InvalidTokenException("refreshToken"));
         final var isExpired = ofNullable(parsedJwt.getExpirationTime())
-                .map(expirationTime -> expirationTime.isBefore(Instant.now()))
+                .map(expirationTime -> expirationTime.isBefore(now()))
                 .orElse(true);
 
         if (isExpired) {
@@ -138,7 +138,7 @@ public class TokenService extends AbstractService {
                 .id(jwt.getAccessTokenId())
                 .auth(auth)
                 .token(jwt.getAccessToken())
-                .expiryDate(jwt.getAccessTokenExpiration().toInstant())
+                .expiryDate(jwt.getAccessTokenExpiration())
                 .build();
 
         auth.setAccess(authAccess);
@@ -148,7 +148,7 @@ public class TokenService extends AbstractService {
                 .auth(auth)
                 .accessTokenId(jwt.getAccessTokenId())
                 .token(jwt.getRefreshToken())
-                .expiryDate(jwt.getRefreshTokenExpiration().toInstant())
+                .expiryDate(jwt.getRefreshTokenExpiration())
                 .build();
 
         auth.setRefresh(authRefresh);

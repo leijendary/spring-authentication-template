@@ -4,6 +4,7 @@ import com.leijendary.spring.authenticationtemplate.config.properties.AuthProper
 import com.leijendary.spring.authenticationtemplate.data.JwtParameters;
 import com.leijendary.spring.authenticationtemplate.data.JwtSet;
 import com.leijendary.spring.authenticationtemplate.data.ParsedJwt;
+import com.leijendary.spring.authenticationtemplate.util.DateUtil;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JOSEObjectType;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -25,13 +26,13 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.text.ParseException;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashSet;
 
 import static com.leijendary.spring.authenticationtemplate.security.JwtTools.TokenType.ACCESS_TOKEN;
 import static com.leijendary.spring.authenticationtemplate.security.JwtTools.TokenType.REFRESH_TOKEN;
+import static com.leijendary.spring.authenticationtemplate.util.RequestContextUtil.now;
 import static java.lang.String.join;
 import static java.time.temporal.ChronoUnit.MINUTES;
 import static java.util.Base64.getDecoder;
@@ -70,7 +71,7 @@ public class JwtTools {
                 .build();
     }
 
-    public String create(final JwtParameters parameters, final Date expiration, final TokenType tokenType) {
+    public String create(final JwtParameters parameters, final OffsetDateTime expiration, final TokenType tokenType) {
         try {
             final var header = new JWSHeader.Builder(JWSAlgorithm.RS256)
                     .type(JOSEObjectType.JWT)
@@ -80,8 +81,8 @@ public class JwtTools {
                     .issuer(authProperties.getIssuer())
                     .audience(parameters.getAudience())
                     .subject(parameters.getSubject())
-                    .claim(CLAIM_ISSUE_TIME, new Date().getTime())
-                    .claim(CLAIM_EXPIRY, expiration.getTime())
+                    .claim(CLAIM_ISSUE_TIME, now().toEpochSecond())
+                    .claim(CLAIM_EXPIRY, expiration.toEpochSecond())
                     .claim(CLAIM_SCOPE, join(" ", parameters.getScopes()));
             RSAPrivateKey privateKey;
 
@@ -114,10 +115,10 @@ public class JwtTools {
             final var signedJWT = SignedJWT.parse(jwt);
             final var claimsSet = signedJWT.getJWTClaimsSet();
             final var issueTime = ofNullable(claimsSet.getIssueTime())
-                    .map(Date::toInstant)
+                    .map(DateUtil::toOffsetDateTime)
                     .orElse(null);
             final var expirationTime = ofNullable(claimsSet.getExpirationTime())
-                    .map(Date::toInstant)
+                    .map(DateUtil::toOffsetDateTime)
                     .orElse(null);
             final var accessTokenId = claimsSet.getStringClaim(CLAIM_ATI);
             final var scopes = ofNullable(claimsSet.getStringClaim(CLAIM_SCOPE))
@@ -154,7 +155,7 @@ public class JwtTools {
         }
     }
 
-    private Date getExpiration(final TokenType type) {
+    private OffsetDateTime getExpiration(final TokenType type) {
         var minutes = 0;
 
         if (type == ACCESS_TOKEN) {
@@ -165,9 +166,7 @@ public class JwtTools {
             throw new IllegalArgumentException("Token Type " + type.toString() + " is invalid.");
         }
 
-        final var now = Instant.now().plus(minutes, MINUTES);
-
-        return Date.from(now);
+        return now().plus(minutes, MINUTES);
     }
 
     private RSAPrivateKey getAccessTokenPrivateKey() throws NoSuchAlgorithmException, InvalidKeySpecException {

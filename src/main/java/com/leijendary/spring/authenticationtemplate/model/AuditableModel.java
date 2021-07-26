@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -19,13 +19,13 @@ import java.time.Instant;
 public abstract class AuditableModel extends SnowflakeIdModel {
 
     @CreatedDate
-    private Instant createdDate;
+    private OffsetDateTime createdDate;
 
     @CreatedBy
     private String createdBy;
 
     @LastModifiedDate
-    private Instant lastModifiedDate;
+    private OffsetDateTime lastModifiedDate;
 
     @LastModifiedBy
     private String lastModifiedBy;

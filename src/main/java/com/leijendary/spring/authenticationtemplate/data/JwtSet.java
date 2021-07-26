@@ -3,7 +3,7 @@ package com.leijendary.spring.authenticationtemplate.data;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Data
@@ -12,8 +12,8 @@ public class JwtSet {
 
     private UUID accessTokenId;
     private String accessToken;
-    private Date accessTokenExpiration;
+    private OffsetDateTime accessTokenExpiration;
     private UUID refreshTokenId;
     private String refreshToken;
-    private Date refreshTokenExpiration;
+    private OffsetDateTime refreshTokenExpiration;
 }

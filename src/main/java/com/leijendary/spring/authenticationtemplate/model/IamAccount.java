@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.OneToMany;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.Set;
 
 @Data
@@ -26,11 +26,11 @@ public class IamAccount extends SnowflakeIdModel {
     private String status;
 
     @CreatedDate
-    private Instant createdDate;
+    private OffsetDateTime createdDate;
 
     @CreatedBy
     private String createdBy;
 
-    private Instant deactivatedDate;
+    private OffsetDateTime deactivatedDate;
     private String deactivatedBy;
 }
