@@ -24,8 +24,7 @@ public class MethodArgumentNotValidExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(BAD_REQUEST)
     public ErrorResponse catchMethodArgumentNotValid(final MethodArgumentNotValidException exception) {
-        final var response = ErrorResponse.builder()
-                .status(BAD_REQUEST);
+        final var response = ErrorResponse.builder().status(BAD_REQUEST);
 
         exception.getAllErrors().forEach(e -> {
             String objectName;
