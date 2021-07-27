@@ -67,7 +67,7 @@ public class TokenService extends AbstractService {
 
         final var scopes = getScopes(user);
 
-        generateAndSetTokens(auth, tokenRequest.getAudience(), scopes);
+        generateAndSetTokens(auth, scopes);
 
         credential.setLastUsedDate(now());
 
@@ -107,7 +107,7 @@ public class TokenService extends AbstractService {
         authAccessRepository.delete(auth.getAccess());
         authRefreshRepository.delete(auth.getRefresh());
 
-        generateAndSetTokens(auth, auth.getAudience(), scopes);
+        generateAndSetTokens(auth, scopes);
 
         return AuthFactory.toTokenResponseV1(auth);
     }
@@ -124,12 +124,12 @@ public class TokenService extends AbstractService {
                 .ifPresent(authRepository::delete);
     }
 
-    private void generateAndSetTokens(final Auth auth, final String audience, final Set<String> scopes) {
+    private void generateAndSetTokens(final Auth auth, final Set<String> scopes) {
         final var jwtParameters = JwtParameters.builder()
                 .accessTokenId(randomUUID())
                 .refreshTokenId(randomUUID())
                 .subject(String.valueOf(auth.getUserId()))
-                .audience(audience)
+                .audience(auth.getAudience())
                 .scopes(scopes)
                 .build();
         final var jwt = jwtTools.create(jwtParameters);
