@@ -36,10 +36,4 @@ public class Auth extends SnowflakeIdModel {
     @ToString.Exclude
     @OneToOne(mappedBy = "auth", cascade = CascadeType.ALL)
     private AuthRefresh refresh;
-
-    public static class Type {
-
-        public static final String MOBILE = "mobile";
-        public static final String EMAIL = "email";
-    }
 }

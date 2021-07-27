@@ -1,0 +1,1 @@
+package com.leijendary.spring.authenticationtemplate.validator.annotation;

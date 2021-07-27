@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import static java.util.Locale.getDefault;
+import static com.leijendary.spring.authenticationtemplate.util.RequestContextUtil.getLocale;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @RestControllerAdvice
@@ -23,7 +23,7 @@ public class InvalidTokenSignatureExceptionHandler {
     @ResponseStatus(BAD_REQUEST)
     public ErrorResponse catchInvalidTokenSignature(final InvalidTokenSignatureException exception) {
         final var code = "validation.token.invalid.signature";
-        final var message = messageSource.getMessage(code, new Object[] { }, getDefault());
+        final var message = messageSource.getMessage(code, new Object[] { }, getLocale());
 
         return ErrorResponse.builder()
                 .addError(exception.getSource(), code, message)

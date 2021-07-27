@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import static java.util.Locale.getDefault;
+import static com.leijendary.spring.authenticationtemplate.util.RequestContextUtil.getLocale;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestControllerAdvice
@@ -27,7 +27,7 @@ public class InvalidCredentialExceptionHandler {
         log.error(exception.getMessage(), exception);
 
         final var code = "validation.credentials.invalid";
-        final var message = messageSource.getMessage(code, new Object[] { }, getDefault());
+        final var message = messageSource.getMessage(code, new Object[] { }, getLocale());
 
         return ErrorResponse.builder()
                 .addError(exception.getSource(), code, message)
