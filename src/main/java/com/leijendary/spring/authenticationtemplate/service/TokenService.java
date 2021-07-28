@@ -11,6 +11,8 @@ import com.leijendary.spring.authenticationtemplate.factory.AuthFactory;
 import com.leijendary.spring.authenticationtemplate.model.*;
 import com.leijendary.spring.authenticationtemplate.repository.*;
 import com.leijendary.spring.authenticationtemplate.security.JwtTools;
+import com.leijendary.spring.authenticationtemplate.specification.NonDeactivatedAccountUser;
+import com.leijendary.spring.authenticationtemplate.specification.NonDeactivatedAccountUserCredential;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -39,8 +41,11 @@ public class TokenService extends AbstractService {
 
     @Transactional
     public TokenResponseV1 create(final TokenRequestV1 tokenRequest) {
-        final var credential = iamUserCredentialRepository
-                .findFirstByUsernameIgnoreCaseAndType(tokenRequest.getUsername(), tokenRequest.getType())
+        final var specification = NonDeactivatedAccountUserCredential.builder()
+                .username(tokenRequest.getUsername())
+                .type(tokenRequest.getType())
+                .build();
+        final var credential = iamUserCredentialRepository.findOne(specification)
                 .orElseThrow(() -> new InvalidCredentialException(tokenRequest.getUsername(), "username"));
 
         // Validate password
@@ -94,7 +99,8 @@ public class TokenService extends AbstractService {
             throw new TokenExpiredException("refreshToken");
         }
 
-        final var user = iamUserRepository.findById(auth.getUserId())
+        final var specification = NonDeactivatedAccountUser.builder().build();
+        final var user = iamUserRepository.findOne(specification)
                 .orElseThrow(() -> new ResourceNotFoundException("user", auth.getUserId()));
         final var account = user.getAccount();
 
@@ -175,7 +181,7 @@ public class TokenService extends AbstractService {
     }
 
     private void checkAccountStatus(final IamAccount account) {
-        if (!account.getStatus().equals(Status.ACTIVE)) {
+        if (account != null && !account.getStatus().equals(Status.ACTIVE)) {
             throw new NotActiveException("account.status", "access.account.inactive");
         }
     }

@@ -32,5 +32,4 @@ public class IamAccount extends SnowflakeIdModel {
     private String createdBy;
 
     private OffsetDateTime deactivatedDate;
-    private String deactivatedBy;
 }

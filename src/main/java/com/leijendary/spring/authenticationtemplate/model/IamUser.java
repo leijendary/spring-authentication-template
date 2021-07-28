@@ -47,4 +47,6 @@ public class IamUser extends SnowflakeIdModel {
 
     @LastModifiedBy
     private String lastModifiedBy;
+
+    private OffsetDateTime deactivatedDate;
 }

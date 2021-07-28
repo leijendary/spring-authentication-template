@@ -94,7 +94,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                   name: type
-                  type: VARCHAR(6)
+                  type: VARCHAR(12)
               - column:
                   constraints:
                     nullable: false
