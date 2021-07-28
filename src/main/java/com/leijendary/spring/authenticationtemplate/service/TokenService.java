@@ -40,7 +40,7 @@ public class TokenService extends AbstractService {
     @Transactional
     public TokenResponseV1 create(final TokenRequestV1 tokenRequest) {
         final var credential = iamUserCredentialRepository
-                .findFirstByUsernameIgnoreCase(tokenRequest.getUsername())
+                .findFirstByUsernameIgnoreCaseAndType(tokenRequest.getUsername(), tokenRequest.getType())
                 .orElseThrow(() -> new InvalidCredentialException(tokenRequest.getUsername(), "username"));
 
         // Validate password

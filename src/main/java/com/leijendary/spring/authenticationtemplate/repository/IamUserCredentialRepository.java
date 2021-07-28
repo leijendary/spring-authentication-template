@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface IamUserCredentialRepository extends JpaRepository<IamUserCredential, Long> {
 
-    Optional<IamUserCredential> findFirstByUsernameIgnoreCase(final String username);
+    Optional<IamUserCredential> findFirstByUsernameIgnoreCaseAndType(final String username, final String type);
 }
