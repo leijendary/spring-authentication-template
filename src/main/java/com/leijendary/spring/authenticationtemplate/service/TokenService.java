@@ -1,7 +1,6 @@
 package com.leijendary.spring.authenticationtemplate.service;
 
 import com.leijendary.spring.authenticationtemplate.data.JwtParameters;
-import com.leijendary.spring.authenticationtemplate.data.Status;
 import com.leijendary.spring.authenticationtemplate.data.request.v1.TokenRefreshRequestV1;
 import com.leijendary.spring.authenticationtemplate.data.request.v1.TokenRequestV1;
 import com.leijendary.spring.authenticationtemplate.data.request.v1.TokenRevokeRequestV1;
@@ -22,7 +21,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.leijendary.spring.authenticationtemplate.data.Status.ACTIVE;
+import static com.leijendary.spring.authenticationtemplate.data.Status.INCOMPLETE;
 import static com.leijendary.spring.authenticationtemplate.util.RequestContextUtil.now;
+import static java.util.Arrays.asList;
 import static java.util.Optional.ofNullable;
 import static java.util.UUID.fromString;
 import static java.util.UUID.randomUUID;
@@ -175,13 +177,15 @@ public class TokenService extends AbstractService {
     }
 
     private void checkUserStatus(final IamUser user) {
-        if (!user.getStatus().equals(Status.ACTIVE)) {
+        final var statuses = asList(ACTIVE, INCOMPLETE);
+
+        if (!statuses.contains(user.getStatus())) {
             throw new NotActiveException("user.status", "access.user.inactive");
         }
     }
 
     private void checkAccountStatus(final IamAccount account) {
-        if (account != null && !account.getStatus().equals(Status.ACTIVE)) {
+        if (account != null && !account.getStatus().equals(ACTIVE)) {
             throw new NotActiveException("account.status", "access.account.inactive");
         }
     }
