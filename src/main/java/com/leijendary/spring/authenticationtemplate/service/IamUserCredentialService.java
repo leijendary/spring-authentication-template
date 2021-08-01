@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import static com.leijendary.spring.authenticationtemplate.util.RequestContextUtil.now;
+
 @Service
 @RequiredArgsConstructor
 public class IamUserCredentialService extends AbstractService {
@@ -33,6 +35,10 @@ public class IamUserCredentialService extends AbstractService {
             throw new InvalidCredentialException(username, "username");
         }
 
-        return iamUserCredential;
+        // Update the last used date of the credential to current timestamp
+        // since this is technically used right now
+        iamUserCredential.setLastUsedDate(now());
+
+        return iamUserCredentialRepository.save(iamUserCredential);
     }
 }
