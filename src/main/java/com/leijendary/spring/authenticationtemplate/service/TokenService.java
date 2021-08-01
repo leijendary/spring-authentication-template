@@ -4,9 +4,7 @@ import com.leijendary.spring.authenticationtemplate.data.JwtParameters;
 import com.leijendary.spring.authenticationtemplate.data.request.v1.TokenRefreshRequestV1;
 import com.leijendary.spring.authenticationtemplate.data.request.v1.TokenRequestV1;
 import com.leijendary.spring.authenticationtemplate.data.request.v1.TokenRevokeRequestV1;
-import com.leijendary.spring.authenticationtemplate.data.response.v1.TokenResponseV1;
 import com.leijendary.spring.authenticationtemplate.exception.*;
-import com.leijendary.spring.authenticationtemplate.factory.AuthFactory;
 import com.leijendary.spring.authenticationtemplate.model.*;
 import com.leijendary.spring.authenticationtemplate.repository.*;
 import com.leijendary.spring.authenticationtemplate.security.JwtTools;
@@ -42,7 +40,7 @@ public class TokenService extends AbstractService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public TokenResponseV1 create(final TokenRequestV1 tokenRequest) {
+    public Auth create(final TokenRequestV1 tokenRequest) {
         final var specification = NonDeactivatedAccountUserCredential.builder()
                 .username(tokenRequest.getUsername())
                 .type(tokenRequest.getType())
@@ -80,11 +78,11 @@ public class TokenService extends AbstractService {
 
         iamUserCredentialRepository.save(credential);
 
-        return AuthFactory.toTokenResponseV1(auth);
+        return auth;
     }
 
     @Transactional
-    public TokenResponseV1 refresh(final TokenRefreshRequestV1 refreshRequest) {
+    public Auth refresh(final TokenRefreshRequestV1 refreshRequest) {
         final var parsedJwt = jwtTools.parse(refreshRequest.getRefreshToken());
 
         if (!parsedJwt.isVerified()) {
@@ -101,7 +99,9 @@ public class TokenService extends AbstractService {
             throw new TokenExpiredException("refreshToken");
         }
 
-        final var specification = NonDeactivatedAccountUser.builder().build();
+        final var specification = NonDeactivatedAccountUser.builder()
+                .userId(auth.getUserId())
+                .build();
         final var user = iamUserRepository.findOne(specification)
                 .orElseThrow(() -> new ResourceNotFoundException("user", auth.getUserId()));
         final var account = user.getAccount();
@@ -117,7 +117,7 @@ public class TokenService extends AbstractService {
 
         generateAndSetTokens(auth, scopes);
 
-        return AuthFactory.toTokenResponseV1(auth);
+        return auth;
     }
 
     public void revoke(final TokenRevokeRequestV1 revokeRequest) {

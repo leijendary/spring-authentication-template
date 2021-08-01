@@ -199,26 +199,20 @@ spring:
   cloud:
     stream:
       bindings:
-        tokenCreated-out-0:
-          destination: ${info.app.artifactId}.token.created
+        tokenCreate-out-0:
+          destination: ${info.app.artifactId}.token.create
           producer:
             useNativeEncoding: true
-        tokenRefreshed-out-0:
-          destination: ${info.app.artifactId}.token.refreshed
+        tokenRefresh-out-0:
+          destination: ${info.app.artifactId}.token.refresh
           producer:
             useNativeEncoding: true
-        tokenRevoked-out-0:
-          destination: ${info.app.artifactId}.token.revoked
+        tokenRevoke-out-0:
+          destination: ${info.app.artifactId}.token.revoke
           producer:
             useNativeEncoding: true
-        userCreated-in-0:
-          destination: account-microservice.user.created
-        userUpdated-in-0:
-          destination: account-microservice.user.updated
       function:
-        definition: >-
-          userCreated;
-          userUpdated
+        definition: tokenCreate;tokenRefresh;tokenRevoke
       kafka:
         binder:
           autoAddPartitions: true
@@ -231,16 +225,12 @@ spring:
                 value:
                   serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
             functions:
-              tokenCreated:
-                applicationId: ${info.app.organization}.${info.app.artifactId}.token.created
-              tokenRefreshed:
-                applicationId: ${info.app.organization}.${info.app.artifactId}.token.refreshed
-              tokenRevoked:
-                applicationId: ${info.app.organization}.${info.app.artifactId}.token.revoked
-              userCreated:
-                applicationId: ${info.app.organization}.account-microservice.user.created
-              userUpdated:
-                applicationId: ${info.app.organization}.account-microservice.user.updated
+              tokenCreate:
+                applicationId: ${info.app.organization}.${info.app.artifactId}.token.create
+              tokenRefresh:
+                applicationId: ${info.app.organization}.${info.app.artifactId}.token.refresh
+              tokenRevoke:
+                applicationId: ${info.app.organization}.${info.app.artifactId}.token.revoke
   kafka:
     bootstrapServers:
     consumer:

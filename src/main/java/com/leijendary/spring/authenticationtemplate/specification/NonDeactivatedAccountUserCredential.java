@@ -12,7 +12,7 @@ import javax.persistence.criteria.Root;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 
-import static com.leijendary.spring.authenticationtemplate.util.PredicateUtil.lowerLike;
+import static com.leijendary.spring.authenticationtemplate.util.PredicateUtil.lowerEqual;
 import static javax.persistence.criteria.JoinType.INNER;
 import static javax.persistence.criteria.JoinType.LEFT;
 
@@ -46,7 +46,7 @@ public class NonDeactivatedAccountUserCredential implements Specification<IamUse
 
         // Username predicate
         final var usernamePath = root.<String>get("username");
-        final var usernameIgnoreCase = lowerLike(username, usernamePath, criteriaBuilder);
+        final var usernameIgnoreCase = lowerEqual(username, usernamePath, criteriaBuilder);
 
         predicates.add(usernameIgnoreCase);
 

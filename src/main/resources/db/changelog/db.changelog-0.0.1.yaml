@@ -1,69 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 1626889383073-1
-      author: Leijendary (generated)
-      changes:
-        - createTable:
-            columns:
-              - column:
-                  constraints:
-                    nullable: false
-                    primaryKey: true
-                    primaryKeyName: pk_auth_access
-                  name: id
-                  type: UUID
-              - column:
-                  constraints:
-                    nullable: false
-                  name: auth_id
-                  type: BIGINT
-              - column:
-                  constraints:
-                    nullable: false
-                  name: token
-                  type: TEXT
-              - column:
-                  constraints:
-                    nullable: false
-                  name: expiry_date
-                  type: TIMESTAMP WITH TIME ZONE
-            tableName: auth_access
-  - changeSet:
-      id: 1626889383073-2
-      author: Leijendary (generated)
-      changes:
-        - createTable:
-            columns:
-              - column:
-                  constraints:
-                    nullable: false
-                    primaryKey: true
-                    primaryKeyName: pk_auth_refresh
-                  name: id
-                  type: UUID
-              - column:
-                  constraints:
-                    nullable: false
-                  name: auth_id
-                  type: BIGINT
-              - column:
-                  constraints:
-                    nullable: false
-                  name: access_token_id
-                  type: UUID
-              - column:
-                  constraints:
-                    nullable: false
-                  name: token
-                  type: TEXT
-              - column:
-                  constraints:
-                    nullable: false
-                  name: expiry_date
-                  type: TIMESTAMP WITH TIME ZONE
-            tableName: auth_refresh
-  - changeSet:
-      id: 1626889383073-3
+      id: 1627741137513-1
       author: Leijendary (generated)
       changes:
         - createTable:
@@ -108,7 +45,70 @@ databaseChangeLog:
                   type: TIMESTAMP WITH TIME ZONE
             tableName: auth
   - changeSet:
-      id: 1626889383073-6
+      id: 1627741137513-2
+      author: Leijendary (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_auth_access
+                  name: id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: auth_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: token
+                  type: TEXT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: expiry_date
+                  type: TIMESTAMP WITH TIME ZONE
+            tableName: auth_access
+  - changeSet:
+      id: 1627741137513-3
+      author: Leijendary (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_auth_refresh
+                  name: id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: auth_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: access_token_id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                  name: token
+                  type: TEXT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: expiry_date
+                  type: TIMESTAMP WITH TIME ZONE
+            tableName: auth_refresh
+  - changeSet:
+      id: 1627741137513-4
       author: Leijendary (generated)
       changes:
         - addForeignKeyConstraint:
@@ -123,7 +123,7 @@ databaseChangeLog:
             referencedTableName: auth
             validate: true
   - changeSet:
-      id: 1626889383073-7
+      id: 1627741137513-5
       author: Leijendary (generated)
       changes:
         - addForeignKeyConstraint:

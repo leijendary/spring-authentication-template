@@ -6,7 +6,7 @@ import com.leijendary.spring.authenticationtemplate.data.request.v1.TokenRequest
 import com.leijendary.spring.authenticationtemplate.data.request.v1.TokenRevokeRequestV1;
 import com.leijendary.spring.authenticationtemplate.data.response.DataResponse;
 import com.leijendary.spring.authenticationtemplate.data.response.v1.TokenResponseV1;
-import com.leijendary.spring.authenticationtemplate.service.TokenService;
+import com.leijendary.spring.authenticationtemplate.flow.TokenFlow;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -26,14 +26,14 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 @Api("Endpoints for token related actions like getting a token, refreshing a token, or revoking a token")
 public class TokenControllerV1 extends AbstractController {
 
-    private final TokenService tokenService;
+    private final TokenFlow tokenFlow;
 
     @PostMapping
     @ResponseStatus(CREATED)
     @ApiOperation("Creates an access token with refresh token. The tokens will be saved to the database for " +
             "reference until revoked")
     public CompletableFuture<DataResponse<TokenResponseV1>> create(@Valid @RequestBody final TokenRequestV1 request) {
-        final var tokenResponse = tokenService.create(request);
+        final var tokenResponse = tokenFlow.createV1(request);
         final var response = DataResponse.<TokenResponseV1>builder()
                 .data(tokenResponse)
                 .status(CREATED)
@@ -48,7 +48,7 @@ public class TokenControllerV1 extends AbstractController {
             "the expiration date should be after the current date")
     public CompletableFuture<DataResponse<TokenResponseV1>> refresh(
             @Valid @RequestBody final TokenRefreshRequestV1 request) {
-        final var tokenResponse = tokenService.refresh(request);
+        final var tokenResponse = tokenFlow.refreshV1(request);
         final var response = DataResponse.<TokenResponseV1>builder()
                 .data(tokenResponse)
                 .object(TokenResponseV1.class)
@@ -61,7 +61,7 @@ public class TokenControllerV1 extends AbstractController {
     @ResponseStatus(NO_CONTENT)
     @ApiOperation("Revokes the access token")
     public CompletableFuture<Void> revoke(@Valid @RequestBody final TokenRevokeRequestV1 request) {
-        tokenService.revoke(request);
+        tokenFlow.revokeV1(request);
 
         return completedFuture(null);
     }

@@ -17,7 +17,7 @@ public class AuthListener {
         final var authProducer = getBean(AuthProducer.class);
         final var authSchema = toSchema(auth);
 
-        authProducer.created(authSchema);
+        authProducer.create(authSchema);
     }
 
     @PostUpdate
@@ -25,7 +25,7 @@ public class AuthListener {
         final var authProducer = getBean(AuthProducer.class);
         final var authSchema = toSchema(auth);
 
-        authProducer.refreshed(authSchema);
+        authProducer.refresh(authSchema);
     }
 
     @PostRemove
@@ -33,6 +33,6 @@ public class AuthListener {
         final var authProducer = getBean(AuthProducer.class);
         final var authSchema = toSchema(auth);
 
-        authProducer.revoked(authSchema);
+        authProducer.revoke(authSchema);
     }
 }

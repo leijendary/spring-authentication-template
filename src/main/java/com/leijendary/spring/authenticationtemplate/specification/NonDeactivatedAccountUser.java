@@ -15,12 +15,18 @@ import java.time.OffsetDateTime;
 @Builder
 public class NonDeactivatedAccountUser implements Specification<IamUser> {
 
+    private final long userId;
+
     @Override
     public Predicate toPredicate(@NonNull final Root<IamUser> root, @NonNull final CriteriaQuery<?> criteriaQuery,
                                  @NonNull final CriteriaBuilder criteriaBuilder) {
         // User's deactivated status
         final var userDeactivatedDatePath = root.<OffsetDateTime>get("deactivatedDate");
         final var userNotDeactivated = userDeactivatedDatePath.isNull();
+
+        // User's id filtering
+        final var idPath = root.<Long>get("id");
+        final var idEquals = criteriaBuilder.equal(idPath, userId);
 
         // Account's deactivated status
         final var accountPath = root.<IamAccount>get("account");
@@ -30,7 +36,7 @@ public class NonDeactivatedAccountUser implements Specification<IamUser> {
         final var accountIsNullOrNotDeactivated = criteriaBuilder.or(accountIsNull, accountNotDeactivated);
 
         return criteriaQuery
-                .where(userNotDeactivated, accountIsNullOrNotDeactivated)
+                .where(userNotDeactivated, idEquals, accountIsNullOrNotDeactivated)
                 .getRestriction();
     }
 }

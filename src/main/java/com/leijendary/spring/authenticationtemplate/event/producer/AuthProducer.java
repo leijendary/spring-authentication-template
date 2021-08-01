@@ -1,27 +1,53 @@
 package com.leijendary.spring.authenticationtemplate.event.producer;
 
 import com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema;
-import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.context.annotation.Bean;
+import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Sinks;
 
-import static com.leijendary.spring.authenticationtemplate.event.binding.TokenBinding.*;
+import java.util.function.Supplier;
+
+import static reactor.core.publisher.Sinks.many;
 
 @Component
 public class AuthProducer extends AbstractProducer<AuthSchema> {
 
-    public AuthProducer(final StreamBridge streamBridge) {
-        super(streamBridge);
+    private final Sinks.Many<Message<AuthSchema>> createBuffer = many().multicast().onBackpressureBuffer();
+    private final Sinks.Many<Message<AuthSchema>> refreshBuffer = many().multicast().onBackpressureBuffer();
+    private final Sinks.Many<Message<AuthSchema>> revokeBuffer = many().multicast().onBackpressureBuffer();
+
+    @Bean
+    public Supplier<Flux<Message<AuthSchema>>> tokenCreate() {
+        return createBuffer::asFlux;
     }
 
-    public void created(final AuthSchema tokenSchema) {
-        send(CREATED, String.valueOf(tokenSchema.getId()), tokenSchema);
+    @Bean
+    public Supplier<Flux<Message<AuthSchema>>> tokenRefresh() {
+        return refreshBuffer::asFlux;
     }
 
-    public void refreshed(final AuthSchema tokenSchema) {
-        send(REFRESHED, String.valueOf(tokenSchema.getId()), tokenSchema);
+    @Bean
+    public Supplier<Flux<Message<AuthSchema>>> tokenRevoke() {
+        return revokeBuffer::asFlux;
     }
 
-    public void revoked(final AuthSchema tokenSchema) {
-        send(REVOKED, String.valueOf(tokenSchema.getId()), tokenSchema);
+    public void create(final AuthSchema authSchema) {
+       final var message = messageWithKey(String.valueOf(authSchema.getId()), authSchema);
+
+       createBuffer.tryEmitNext(message);
+    }
+
+    public void refresh(final AuthSchema authSchema) {
+        final var message = messageWithKey(String.valueOf(authSchema.getId()), authSchema);
+
+        refreshBuffer.tryEmitNext(message);
+    }
+
+    public void revoke(final AuthSchema authSchema) {
+        final var message = messageWithKey(String.valueOf(authSchema.getId()), authSchema);
+
+        revokeBuffer.tryEmitNext(message);
     }
 }
