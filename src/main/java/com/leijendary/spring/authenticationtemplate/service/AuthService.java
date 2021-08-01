@@ -15,6 +15,7 @@ import com.leijendary.spring.authenticationtemplate.repository.AuthRepository;
 import com.leijendary.spring.authenticationtemplate.security.JwtTools;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
@@ -39,6 +40,7 @@ public class AuthService extends AbstractService {
         return authRepository.save(auth);
     }
 
+    @Transactional
     public Auth refreshToken(final ParsedJwt parsedJwt) {
         final var auth = authRepository.findFirstByRefreshId(fromString(parsedJwt.getId()))
                 .orElseThrow(() -> new InvalidTokenException("refreshToken"));
@@ -54,6 +56,10 @@ public class AuthService extends AbstractService {
         authAccessRepository.delete(auth.getAccess());
         authRefreshRepository.delete(auth.getRefresh());
 
+        // Set access and refresh tokens to null since they should be deleted
+        auth.setAccess(null);
+        auth.setRefresh(null);
+
         return auth;
     }
 
@@ -63,6 +69,7 @@ public class AuthService extends AbstractService {
                 .ifPresent(authRepository::delete);
     }
 
+    @Transactional
     public void generateAndSetTokens(final Auth auth, final Set<String> scopes) {
         final var jwtParameters = JwtParameters.builder()
                 .accessTokenId(randomUUID())

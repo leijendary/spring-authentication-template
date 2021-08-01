@@ -41,8 +41,11 @@ public class TokenFlow {
         // Check if the account's status is still in a valid state
         iamAccountService.checkAccountStatus(iamAccount);
 
+        final var userId = iamUser.getId();
+        final var authData = AuthDataFactory.of(tokenRequestV1);
+        authData.setUserId(userId);
+
         // Create the Auth object
-        final var authData = AuthDataFactory.of(toke33nRequestV1);
         final var auth = authService.create(authData);
 
         // Get the scopes of the role of the user
