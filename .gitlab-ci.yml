@@ -58,7 +58,7 @@ cache: &global_cache
     - docker push $REPOSITORY_URL:$CI_COMMIT_SHA
     - echo "Pushed images."
   tags:
-    - MediumRunner
+    - SmallRunner
 
 # 1. Test
 # 2. Build
@@ -84,7 +84,7 @@ Test Merge Request:
     - sh ./mvnw $MAVEN_CLI_OPTS test
     - echo "Tests completed."
   tags:
-    - ExtraLargeRunner
+    - MediumRunner
   only:
     - merge_requests
 
@@ -97,7 +97,7 @@ Test:
     - sh ./mvnw $MAVEN_CLI_OPTS test
     - echo "Tests completed."
   tags:
-    - ExtraLargeRunner
+    - MediumRunner
   only:
     - develop
     - /^release/.*$/i
@@ -116,7 +116,7 @@ Build:
     paths:
       - target/*.jar
   tags:
-    - ExtraLargeRunner
+    - MediumRunner
   only:
     - develop
     - /^release/.*$/i
