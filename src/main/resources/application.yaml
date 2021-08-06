@@ -200,15 +200,15 @@ spring:
     stream:
       bindings:
         tokenCreate-out-0:
-          destination: ${info.app.artifactId}.token.create
+          destination: ${info.app.organization}.token.create
           producer:
             useNativeEncoding: true
         tokenRefresh-out-0:
-          destination: ${info.app.artifactId}.token.refresh
+          destination: ${info.app.organization}.token.refresh
           producer:
             useNativeEncoding: true
         tokenRevoke-out-0:
-          destination: ${info.app.artifactId}.token.revoke
+          destination: ${info.app.organization}.token.revoke
           producer:
             useNativeEncoding: true
       function:
@@ -226,11 +226,11 @@ spring:
                   serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
             functions:
               tokenCreate:
-                applicationId: ${info.app.organization}.${info.app.artifactId}.token.create
+                applicationId: ${info.app.artifactId}.${info.app.organization}.token.create
               tokenRefresh:
-                applicationId: ${info.app.organization}.${info.app.artifactId}.token.refresh
+                applicationId: ${info.app.artifactId}.${info.app.organization}.token.refresh
               tokenRevoke:
-                applicationId: ${info.app.organization}.${info.app.artifactId}.token.revoke
+                applicationId: ${info.app.artifactId}.${info.app.organization}.token.revoke
   kafka:
     bootstrapServers:
     consumer:
