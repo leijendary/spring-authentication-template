@@ -1,6 +1,6 @@
 package com.leijendary.spring.authenticationtemplate.event.producer;
 
-import com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema;
+import com.leijendary.schema.AuthSchema;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;

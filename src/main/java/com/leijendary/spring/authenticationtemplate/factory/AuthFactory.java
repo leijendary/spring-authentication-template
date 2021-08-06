@@ -1,8 +1,8 @@
 package com.leijendary.spring.authenticationtemplate.factory;
 
+import com.leijendary.schema.AuthSchema;
 import com.leijendary.spring.authenticationtemplate.data.AuthData;
 import com.leijendary.spring.authenticationtemplate.data.response.v1.TokenResponseV1;
-import com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema;
 import com.leijendary.spring.authenticationtemplate.model.Auth;
 
 public class AuthFactory extends AbstractFactory {

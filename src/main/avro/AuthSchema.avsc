@@ -1,6 +1,6 @@
 {
   "type": "record",
-  "namespace": "com.leijendary.spring.authenticationtemplate.event.schema",
+  "namespace": "com.leijendary.schema",
   "name": "AuthSchema",
   "fields": [
     {

@@ -3,7 +3,7 @@
  *
  * DO NOT EDIT DIRECTLY
  */
-package com.leijendary.spring.authenticationtemplate.event.schema;
+package com.leijendary.schema;
 
 import org.apache.avro.generic.GenericArray;
 import org.apache.avro.specific.SpecificData;
@@ -14,8 +14,8 @@ import org.apache.avro.message.SchemaStore;
 
 @org.apache.avro.specific.AvroGenerated
 public class AuthSchema extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 7977997900417366563L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"AuthSchema\",\"namespace\":\"com.leijendary.spring.authenticationtemplate.event.schema\",\"fields\":[{\"name\":\"id\",\"type\":\"long\"},{\"name\":\"userId\",\"type\":\"long\"},{\"name\":\"username\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"audience\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"type\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"deviceId\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"createdDate\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}}]}");
+  private static final long serialVersionUID = 7621710446236726307L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"AuthSchema\",\"namespace\":\"com.leijendary.schema\",\"fields\":[{\"name\":\"id\",\"type\":\"long\"},{\"name\":\"userId\",\"type\":\"long\"},{\"name\":\"username\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"audience\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"type\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"deviceId\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"createdDate\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -260,8 +260,8 @@ public class AuthSchema extends org.apache.avro.specific.SpecificRecordBase impl
    * Creates a new AuthSchema RecordBuilder.
    * @return A new AuthSchema RecordBuilder
    */
-  public static com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema.Builder newBuilder() {
-    return new com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema.Builder();
+  public static com.leijendary.schema.AuthSchema.Builder newBuilder() {
+    return new com.leijendary.schema.AuthSchema.Builder();
   }
 
   /**
@@ -269,11 +269,11 @@ public class AuthSchema extends org.apache.avro.specific.SpecificRecordBase impl
    * @param other The existing builder to copy.
    * @return A new AuthSchema RecordBuilder
    */
-  public static com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema.Builder newBuilder(com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema.Builder other) {
+  public static com.leijendary.schema.AuthSchema.Builder newBuilder(com.leijendary.schema.AuthSchema.Builder other) {
     if (other == null) {
-      return new com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema.Builder();
+      return new com.leijendary.schema.AuthSchema.Builder();
     } else {
-      return new com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema.Builder(other);
+      return new com.leijendary.schema.AuthSchema.Builder(other);
     }
   }
 
@@ -282,11 +282,11 @@ public class AuthSchema extends org.apache.avro.specific.SpecificRecordBase impl
    * @param other The existing instance to copy.
    * @return A new AuthSchema RecordBuilder
    */
-  public static com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema.Builder newBuilder(com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema other) {
+  public static com.leijendary.schema.AuthSchema.Builder newBuilder(com.leijendary.schema.AuthSchema other) {
     if (other == null) {
-      return new com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema.Builder();
+      return new com.leijendary.schema.AuthSchema.Builder();
     } else {
-      return new com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema.Builder(other);
+      return new com.leijendary.schema.AuthSchema.Builder(other);
     }
   }
 
@@ -314,7 +314,7 @@ public class AuthSchema extends org.apache.avro.specific.SpecificRecordBase impl
      * Creates a Builder by copying an existing Builder.
      * @param other The existing Builder to copy.
      */
-    private Builder(com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema.Builder other) {
+    private Builder(com.leijendary.schema.AuthSchema.Builder other) {
       super(other);
       if (isValidValue(fields()[0], other.id)) {
         this.id = data().deepCopy(fields()[0].schema(), other.id);
@@ -350,7 +350,7 @@ public class AuthSchema extends org.apache.avro.specific.SpecificRecordBase impl
      * Creates a Builder by copying an existing AuthSchema instance
      * @param other The existing instance to copy.
      */
-    private Builder(com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema other) {
+    private Builder(com.leijendary.schema.AuthSchema other) {
       super(SCHEMA$);
       if (isValidValue(fields()[0], other.id)) {
         this.id = data().deepCopy(fields()[0].schema(), other.id);
@@ -396,7 +396,7 @@ public class AuthSchema extends org.apache.avro.specific.SpecificRecordBase impl
       * @param value The value of 'id'.
       * @return This builder.
       */
-    public com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema.Builder setId(long value) {
+    public com.leijendary.schema.AuthSchema.Builder setId(long value) {
       validate(fields()[0], value);
       this.id = value;
       fieldSetFlags()[0] = true;
@@ -416,7 +416,7 @@ public class AuthSchema extends org.apache.avro.specific.SpecificRecordBase impl
       * Clears the value of the 'id' field.
       * @return This builder.
       */
-    public com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema.Builder clearId() {
+    public com.leijendary.schema.AuthSchema.Builder clearId() {
       fieldSetFlags()[0] = false;
       return this;
     }
@@ -435,7 +435,7 @@ public class AuthSchema extends org.apache.avro.specific.SpecificRecordBase impl
       * @param value The value of 'userId'.
       * @return This builder.
       */
-    public com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema.Builder setUserId(long value) {
+    public com.leijendary.schema.AuthSchema.Builder setUserId(long value) {
       validate(fields()[1], value);
       this.userId = value;
       fieldSetFlags()[1] = true;
@@ -455,7 +455,7 @@ public class AuthSchema extends org.apache.avro.specific.SpecificRecordBase impl
       * Clears the value of the 'userId' field.
       * @return This builder.
       */
-    public com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema.Builder clearUserId() {
+    public com.leijendary.schema.AuthSchema.Builder clearUserId() {
       fieldSetFlags()[1] = false;
       return this;
     }
@@ -474,7 +474,7 @@ public class AuthSchema extends org.apache.avro.specific.SpecificRecordBase impl
       * @param value The value of 'username'.
       * @return This builder.
       */
-    public com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema.Builder setUsername(java.lang.String value) {
+    public com.leijendary.schema.AuthSchema.Builder setUsername(java.lang.String value) {
       validate(fields()[2], value);
       this.username = value;
       fieldSetFlags()[2] = true;
@@ -494,7 +494,7 @@ public class AuthSchema extends org.apache.avro.specific.SpecificRecordBase impl
       * Clears the value of the 'username' field.
       * @return This builder.
       */
-    public com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema.Builder clearUsername() {
+    public com.leijendary.schema.AuthSchema.Builder clearUsername() {
       username = null;
       fieldSetFlags()[2] = false;
       return this;
@@ -514,7 +514,7 @@ public class AuthSchema extends org.apache.avro.specific.SpecificRecordBase impl
       * @param value The value of 'audience'.
       * @return This builder.
       */
-    public com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema.Builder setAudience(java.lang.String value) {
+    public com.leijendary.schema.AuthSchema.Builder setAudience(java.lang.String value) {
       validate(fields()[3], value);
       this.audience = value;
       fieldSetFlags()[3] = true;
@@ -534,7 +534,7 @@ public class AuthSchema extends org.apache.avro.specific.SpecificRecordBase impl
       * Clears the value of the 'audience' field.
       * @return This builder.
       */
-    public com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema.Builder clearAudience() {
+    public com.leijendary.schema.AuthSchema.Builder clearAudience() {
       audience = null;
       fieldSetFlags()[3] = false;
       return this;
@@ -554,7 +554,7 @@ public class AuthSchema extends org.apache.avro.specific.SpecificRecordBase impl
       * @param value The value of 'type'.
       * @return This builder.
       */
-    public com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema.Builder setType(java.lang.String value) {
+    public com.leijendary.schema.AuthSchema.Builder setType(java.lang.String value) {
       validate(fields()[4], value);
       this.type = value;
       fieldSetFlags()[4] = true;
@@ -574,7 +574,7 @@ public class AuthSchema extends org.apache.avro.specific.SpecificRecordBase impl
       * Clears the value of the 'type' field.
       * @return This builder.
       */
-    public com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema.Builder clearType() {
+    public com.leijendary.schema.AuthSchema.Builder clearType() {
       type = null;
       fieldSetFlags()[4] = false;
       return this;
@@ -594,7 +594,7 @@ public class AuthSchema extends org.apache.avro.specific.SpecificRecordBase impl
       * @param value The value of 'deviceId'.
       * @return This builder.
       */
-    public com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema.Builder setDeviceId(java.lang.String value) {
+    public com.leijendary.schema.AuthSchema.Builder setDeviceId(java.lang.String value) {
       validate(fields()[5], value);
       this.deviceId = value;
       fieldSetFlags()[5] = true;
@@ -614,7 +614,7 @@ public class AuthSchema extends org.apache.avro.specific.SpecificRecordBase impl
       * Clears the value of the 'deviceId' field.
       * @return This builder.
       */
-    public com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema.Builder clearDeviceId() {
+    public com.leijendary.schema.AuthSchema.Builder clearDeviceId() {
       deviceId = null;
       fieldSetFlags()[5] = false;
       return this;
@@ -634,7 +634,7 @@ public class AuthSchema extends org.apache.avro.specific.SpecificRecordBase impl
       * @param value The value of 'createdDate'.
       * @return This builder.
       */
-    public com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema.Builder setCreatedDate(java.lang.String value) {
+    public com.leijendary.schema.AuthSchema.Builder setCreatedDate(java.lang.String value) {
       validate(fields()[6], value);
       this.createdDate = value;
       fieldSetFlags()[6] = true;
@@ -654,7 +654,7 @@ public class AuthSchema extends org.apache.avro.specific.SpecificRecordBase impl
       * Clears the value of the 'createdDate' field.
       * @return This builder.
       */
-    public com.leijendary.spring.authenticationtemplate.event.schema.AuthSchema.Builder clearCreatedDate() {
+    public com.leijendary.schema.AuthSchema.Builder clearCreatedDate() {
       createdDate = null;
       fieldSetFlags()[6] = false;
       return this;
