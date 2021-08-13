@@ -3,7 +3,7 @@ package com.leijendary.spring.authenticationtemplate.util;
 import java.time.OffsetDateTime;
 import java.util.Date;
 
-import static com.leijendary.spring.authenticationtemplate.util.RequestContextUtil.getTimeZone;
+import static com.leijendary.spring.authenticationtemplate.util.RequestContext.getTimeZone;
 
 public class DateUtil {
 

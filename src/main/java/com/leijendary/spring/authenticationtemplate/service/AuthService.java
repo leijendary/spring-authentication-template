@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
-import static com.leijendary.spring.authenticationtemplate.util.RequestContextUtil.now;
+import static com.leijendary.spring.authenticationtemplate.util.RequestContext.now;
 import static java.util.Optional.ofNullable;
 import static java.util.UUID.fromString;
 import static java.util.UUID.randomUUID;

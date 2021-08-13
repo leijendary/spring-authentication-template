@@ -32,7 +32,7 @@ import java.util.HashSet;
 
 import static com.leijendary.spring.authenticationtemplate.security.JwtTools.TokenType.ACCESS_TOKEN;
 import static com.leijendary.spring.authenticationtemplate.security.JwtTools.TokenType.REFRESH_TOKEN;
-import static com.leijendary.spring.authenticationtemplate.util.RequestContextUtil.now;
+import static com.leijendary.spring.authenticationtemplate.util.RequestContext.now;
 import static java.lang.String.join;
 import static java.time.temporal.ChronoUnit.MINUTES;
 import static java.util.Base64.getDecoder;

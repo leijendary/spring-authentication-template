@@ -2,7 +2,7 @@ package com.leijendary.spring.authenticationtemplate.controller;
 
 import javax.servlet.http.HttpServletResponse;
 
-import static com.leijendary.spring.authenticationtemplate.util.RequestContextUtil.getPath;
+import static com.leijendary.spring.authenticationtemplate.util.RequestContext.getPath;
 import static org.springframework.http.HttpHeaders.LOCATION;
 
 public abstract class AbstractController {

@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import static com.leijendary.spring.authenticationtemplate.util.RequestContextUtil.now;
+import static com.leijendary.spring.authenticationtemplate.util.RequestContext.now;
 
 @Service
 @RequiredArgsConstructor
